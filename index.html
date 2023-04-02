@@ -1,0 +1,67 @@
+<html>
+
+    <head>
+        <title>Cadastro de Produtos</title>
+        <meta charset="UTF-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        
+        <style>
+            .linha {
+                line-height: 30px;
+            }
+
+            .coluna {
+                display: inline-block;
+                width: 150px;
+            }
+        </style>
+
+        <script>
+
+            var fncSubmitForm = function()
+            {
+                var id_produto = $("#id_produto").val();
+                var nm_produto = $("#nm_produto").val();
+                var vl_produto = $("#vl_produto").val();
+
+                const obj = {"id": id_produto, "name": nm_produto, "price": vl_produto};
+                const myJSON = JSON.stringify(obj);
+
+                $.ajax({
+                    url: 'https://rap3whrdt9.execute-api.us-east-1.amazonaws.com/items',
+                    type: 'PUT',
+                    crossDomain: true,
+                    contentType: 'application/json',
+                    dataType: "json",
+                    data: myJSON, 
+                    success: function(){
+                        $('#myForm').trigger("reset");
+                        alert('Item incluído com sucesso');
+                    },
+                    error: function(){
+                        alert('Um erro aconteceu...');
+                    }
+                });
+            }    
+        </script>
+    </head>
+
+    <body>
+        <form id="myForm" name="myForm">
+            <div>
+                <div class="linha">
+                    <span class="coluna">Id do Produto:</span><span><input type="number" id="id_produto" name="id_produto"></span>
+                </div>
+                <div class="linha">
+                    <span class="coluna">Nome do Produto:</span><span><input type="text" id="nm_produto" name="nm_produto"></span>
+                </div>
+                <div class="linha">
+                    <span class="coluna">Preço do Produto:</span><span><input type="number" id="vl_produto" name="vl_produto"></span>
+                </div>
+                <div class="linha">
+                    <span><input type="button" onclick="fncSubmitForm()" value="Enviar">&nbsp;<input type="reset" id="limpar" name="limpar"></span>
+                </div>
+            </div>
+        </form>
+    </body>
+</html>
