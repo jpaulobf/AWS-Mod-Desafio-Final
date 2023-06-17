@@ -20,6 +20,13 @@
 
 			.delete {
 				color: red;
+				cursor: pointer;
+			}
+
+			.edit {
+				color: blue;
+				text-decoration: underline;
+				cursor: pointer;
 			}
 			
 			.grid {
@@ -52,7 +59,7 @@
 
         <script>
 
-			var entryPoint = "https://rdnk0nndn9.execute-api.us-east-1.amazonaws.com";
+			var entryPoint = "https://cetnxkg50i.execute-api.us-east-1.amazonaws.com";
 
             var fncSubmitForm = function()
             {
@@ -108,7 +115,7 @@
 
 						for (var i = (array.Count - 1); i >= 0; i--) {
 							html +='<tr>'
-								  +'<td class="grid-col"><a onclick="fncEdit(\'' + array.Items[i].id + '\', \'' + array.Items[i].name + '\', \'' + array.Items[i].price + '\')">' + array.Items[i].id + '</a></td>'
+								  +'<td class="grid-col"><a class="edit" onclick="fncEdit(\'' + array.Items[i].id + '\', \'' + array.Items[i].name + '\', \'' + array.Items[i].price + '\')">' + array.Items[i].id + '</a></td>'
 								  +'<td class="grid-col">' + array.Items[i].name + '</td>'
 								  +'<td class="grid-col">' + array.Items[i].price + '</td>'
 								  +'<td class="grid-col"><a class="delete" onclick="fncDelete(' + array.Items[i].id + ')">X</a></td>'
