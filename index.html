@@ -52,6 +52,8 @@
 
         <script>
 
+			var entryPoint = "https://rdnk0nndn9.execute-api.us-east-1.amazonaws.com";
+
             var fncSubmitForm = function()
             {
                 var id_produto = $("#id_produto").val();
@@ -67,7 +69,7 @@
 					const myJSON = JSON.stringify(obj);
 
 					$.ajax({
-						url: 'https://t2npkgia79.execute-api.us-east-1.amazonaws.com/items',
+						url: entryPoint + '/items',
 						type: 'PUT',
 						crossDomain: true,
 						contentType: 'application/json',
@@ -85,10 +87,17 @@
 				}
             }
 
+			var fncEdit = function(id, name, value)
+			{
+				$("#id_produto").val(id);
+                $("#nm_produto").val(name);
+                $("#vl_produto").val(value);
+			}
+
 			var fncLoadData = function()
 			{
 				$.ajax({
-					url: 'https://t2npkgia79.execute-api.us-east-1.amazonaws.com/items',
+					url: entryPoint + '/items',
 					type: 'GET'
 				}).done(function( array ) {
 					var html = "";
@@ -99,7 +108,7 @@
 
 						for (var i = (array.Count - 1); i >= 0; i--) {
 							html +='<tr>'
-								  +'<td class="grid-col">' + array.Items[i].id + '</td>'
+								  +'<td class="grid-col"><a onclick="fncEdit(\'' + array.Items[i].id + '\', \'' + array.Items[i].name + '\', \'' + array.Items[i].price + '\')">' + array.Items[i].id + '</a></td>'
 								  +'<td class="grid-col">' + array.Items[i].name + '</td>'
 								  +'<td class="grid-col">' + array.Items[i].price + '</td>'
 								  +'<td class="grid-col"><a class="delete" onclick="fncDelete(' + array.Items[i].id + ')">X</a></td>'
@@ -117,7 +126,7 @@
 			var fncDelete = function(id)
 			{
 				$.ajax({
-					url: 'https://t2npkgia79.execute-api.us-east-1.amazonaws.com/items/' + id,
+					url: entryPoint + '/items/' + id,
 					type: 'DELETE'
 				}).done(function(  ) {
 					fncLoadData();
