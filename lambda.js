@@ -10,13 +10,14 @@ exports.handler = async (event, context) => {
     "Content-Type": "application/json",
     "Access-Control-Allow-Headers": "*"
   };
+  const table = "products";
 
   try {
     switch (event.routeKey) {
       case "DELETE /items/{id}":
         await dynamo
           .delete({
-            TableName: "products",
+            TableName: table,
             Key: {
               id: event.pathParameters.id
             }
@@ -27,7 +28,7 @@ exports.handler = async (event, context) => {
       case "GET /items/{id}":
         body = await dynamo
           .get({
-            TableName: "products",
+            TableName: table,
             Key: {
               id: event.pathParameters.id
             }
@@ -35,13 +36,13 @@ exports.handler = async (event, context) => {
           .promise();
         break;
       case "GET /items":
-        body = await dynamo.scan({ TableName: "products" }).promise();
+        body = await dynamo.scan({ TableName: table }).promise();
         break;
       case "PUT /items":
         let requestJSON = JSON.parse(event.body);
         await dynamo
           .put({
-            TableName: "products",
+            TableName: table,
             Item: {
               id: requestJSON.id,
               price: requestJSON.price,
