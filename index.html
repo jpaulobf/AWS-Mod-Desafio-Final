@@ -59,7 +59,7 @@
 
         <script>
 
-			var entryPoint = "https://7pgvbhw8ja.execute-api.us-east-1.amazonaws.com";
+			var entryPoint = "https://3ok4pm2tdg.execute-api.us-east-1.amazonaws.com";
 
             var fncSubmitForm = function()
             {
@@ -132,12 +132,16 @@
 
 			var fncDelete = function(id)
 			{
-				$.ajax({
-					url: entryPoint + '/items/' + id,
-					type: 'DELETE'
-				}).done(function(  ) {
-					fncLoadData();
-				});
+				if (confirm("Deseja realmente Excluir?") == true) {
+					$.ajax({
+						url: entryPoint + '/items/' + id,
+						type: 'DELETE'
+					}).done(function(  ) {
+						$('#myForm').trigger("reset");
+						alert('Item excluído com sucesso');
+						fncLoadData();
+					});
+				} 
 			}
         </script>
     </head>
