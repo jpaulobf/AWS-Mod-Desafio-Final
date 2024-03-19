@@ -1,0 +1,33 @@
+const AWS = require("aws-sdk");
+const dynamo = new AWS.DynamoDB.DocumentClient();
+
+exports.handler = async (event, context) => {
+
+  //result
+  let body        = "";
+  let statusCode  = 200;
+  const table     = "Products";
+  const headers   = {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Headers": "*"
+  };
+
+  //RouteKey test  
+  try {
+    //Exclui o item
+    await dynamo.delete({TableName: table, Key: {id: event.pathParameters.id}}).promise();
+    body = `Deleted item ${event.pathParameters.id}`;
+  } catch (err) {
+    statusCode = 400;
+    body = err.message;
+  } finally {
+    body = JSON.stringify(body);
+  }
+
+  //return
+  return {
+    statusCode,
+    body,
+    headers
+  };
+};
