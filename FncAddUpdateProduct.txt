@@ -7,7 +7,7 @@ exports.handler = async (event, context) => {
   //configura o retorno
   let body        = "";
   let statusCode  = 200;
-  const table     = "Products";
+  const table     = "products";
   const headers   = {
     "Content-Type": "application/json",
     "Access-Control-Allow-Headers": "*"
