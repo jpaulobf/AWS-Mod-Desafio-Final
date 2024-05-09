@@ -12,6 +12,7 @@ exports.handler = async (event, context) => {
     "Access-Control-Allow-Headers": "*"
   };
 
+
   //RouteKey test  
   try {
     //Exclui o item
