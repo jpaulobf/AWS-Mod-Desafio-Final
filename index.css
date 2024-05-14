@@ -1,0 +1,49 @@
+body {
+    font-family: Arial;
+    font-size: 14px;
+}
+
+.tabela {
+    background-color: lightgray;
+    border: 1px solid gray;
+    width: 400px;
+    padding: 20px;
+}
+
+.delete {
+    color: red;
+    cursor: pointer;
+}
+
+.edit {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.grid {
+    border: 1px solid gray;
+    width: 440px;
+    padding: 20px;
+}
+
+.linha {
+    line-height: 40px;
+}
+
+.coluna {
+    display: inline-block;
+    width: 150px;
+}
+
+.grid-col {
+    text-align: center;
+}
+
+.button {
+    background-color: lightblue;
+    border: 1px solid black;
+    height: 24px;
+    width: 80px;
+    border-radius: 4px;
+}
