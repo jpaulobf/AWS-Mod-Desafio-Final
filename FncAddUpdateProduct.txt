@@ -16,6 +16,12 @@ exports.handler = async (event, context) => {
     //recupera o evento e faz um parse do JSON
     let requestJSON = JSON.parse(event.body);
     
+    //{
+    //  "id":"1",
+    //  "price":45,
+    //  "name":"caneta"
+    //}
+
     //persiste na tabela, que espera os campos id, price e name
     await dynamo.put({TableName: table, Item: {id: requestJSON.id, price: requestJSON.price, name: requestJSON.name}}).promise();
     
