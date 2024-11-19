@@ -1,32 +1,45 @@
-const AWS = require("aws-sdk");
-const dynamo = new AWS.DynamoDB.DocumentClient();
+// Importando o SDK v3 do DynamoDB
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { ScanCommand } from "@aws-sdk/client-dynamodb";
 
-exports.handler = async (event, context) => {
+// Criando o cliente DynamoDB
+const client = new DynamoDBClient({
+  region: "us-east-1",
+});
 
-  //result
-  let body        = "";
-  let statusCode  = 200;
-  const table     = "products";
-  const headers   = {
+// Função Lambda
+export const handler = async (event) => {
+  let body = "";
+  let statusCode = 200;
+  const table = "products"; // Nome da tabela do DynamoDB
+  const headers = {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Headers": "*"
+    "Access-Control-Allow-Headers": "*",
   };
 
   try {
-      //lista todos os produtos      
-      body = await dynamo.scan({ TableName: table }).promise();
+    // Criando o comando Scan
+    const scanParams = {
+      TableName: table,
+    };
+    const command = new ScanCommand(scanParams);
 
+    // Enviando o comando para o DynamoDB
+    const data = await client.send(command);
+    
+    // Atribuindo os itens retornados pela operação Scan
+    body = data.Items;
   } catch (err) {
     statusCode = 400;
-    body = err.message;
+    body = JSON.stringify({ message: err.message });
   } finally {
     body = JSON.stringify(body);
   }
 
-  //return
+  // Retorno da função Lambda
   return {
     statusCode,
     body,
-    headers
+    headers,
   };
 };

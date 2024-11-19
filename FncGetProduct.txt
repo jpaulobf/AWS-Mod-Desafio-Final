@@ -1,32 +1,64 @@
-const AWS = require("aws-sdk");
-const dynamo = new AWS.DynamoDB.DocumentClient();
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { GetItemCommand } from "@aws-sdk/client-dynamodb";
 
-exports.handler = async (event, context) => {
+// Criando o cliente DynamoDB
+const client = new DynamoDBClient({
+  region: "us-east-1",
+});
 
-  //result
-  let body        = "";
-  let statusCode  = 200;
-  const table     = "products";
-  const headers   = {
+// Função Lambda
+export const handler = async (event) => {
+  let body = "";
+  let statusCode = 200;
+  const table = "products"; 
+  const headers = {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Headers": "*"
+    "Access-Control-Allow-Headers": "*",
   };
 
+  // Obtendo o productId a partir do path parameter
+  const productId = event.pathParameters.id;
+
+  if (!productId) {
+    statusCode = 400;
+    body = JSON.stringify({ message: "Missing productId in path parameter" });
+    return {
+      statusCode,
+      body,
+      headers,
+    };
+  }
+
   try {
-    //recupera o item selecionado
-    body = await dynamo.get({TableName: table, Key: {id: event.pathParameters.id}}).promise();
-    
+    // Comando GetItem para buscar um item por sua chave primária (productId)
+    const params = {
+      TableName: table,
+      Key: {
+        id: { S: productId }, // Chave primária para buscar o item
+      },
+    };
+
+    const command = new GetItemCommand(params);
+    const data = await client.send(command);
+
+    if (!data.Item) {
+      statusCode = 404;
+      body = "Item not found";
+    } else {
+      // Convertendo os dados de volta ao formato desejado (sem o prefixo do DynamoDB)
+      body = data.Item;
+    }
   } catch (err) {
     statusCode = 400;
-    body = err.message;
+    body = JSON.stringify({ message: err.message });
   } finally {
     body = JSON.stringify(body);
   }
 
-  //return
+  // Retorno da função Lambda
   return {
     statusCode,
     body,
-    headers
+    headers,
   };
 };

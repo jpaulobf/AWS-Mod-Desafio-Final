@@ -1,9 +1,9 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DeleteItemCommand } from "@aws-sdk/client-dynamodb";
+import { PutItemCommand } from "@aws-sdk/client-dynamodb";
 
 // Criando o cliente DynamoDB
 const client = new DynamoDBClient({
-  region: "us-east-1", // Substitua pela sua região do DynamoDB
+  region: "us-east-1",
 });
 
 // Função Lambda
@@ -16,12 +16,15 @@ export const handler = async (event) => {
     "Access-Control-Allow-Headers": "*",
   };
 
-  // Obtendo o productId a partir do path parameter
-  const productId = event.pathParameters.id;
+  // Obtendo o produto do corpo da requisição
+  const product = JSON.parse(event.body);
 
-  if (!productId) {
+  // Validando se o productId está presente
+  const { id, nome, preco } = product;
+  
+  if (!id || !nome || !preco) {
     statusCode = 400;
-    body = JSON.stringify({ message: "Missing product id in path parameter" });
+    body = JSON.stringify({ message: "Missing required fields: id, nome, preco" });
     return {
       statusCode,
       body,
@@ -30,19 +33,20 @@ export const handler = async (event) => {
   }
 
   try {
-    // Comando DeleteItem para deletar o item pela chave primária (productId)
+    // Comando PutItem para inserir ou atualizar um item na tabela
     const params = {
       TableName: table,
-      Key: {
-        id: { S: productId }, // Chave primária para deletar o item
+      Item: {
+        id: { S: id }, // Chave primária
+        nome: { S: nome }, // Nome do produto
+        preco: { N: preco.toString() }, // Preço do produto
       },
     };
 
-    const command = new DeleteItemCommand(params);
+    const command = new PutItemCommand(params);
     await client.send(command);
 
-    statusCode = 200;
-    body = `Item with productId ${productId} deleted successfully.`;
+    body = `Product with productId ${id} has been successfully added/updated.`;
   } catch (err) {
     statusCode = 400;
     body = JSON.stringify({ message: err.message });
