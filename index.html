@@ -20,7 +20,7 @@
 					alert("Todos os campos são obrigatórios");
 					return;
 				} else {
-					const obj = {"id": id_produto, "name": nm_produto, "price": vl_produto};
+					const obj = {"id": id_produto, "nome": nm_produto, "preco": vl_produto};
 					const myJSON = JSON.stringify(obj);
 
 					$.ajax({
@@ -57,19 +57,17 @@
 				}).done(function( array ) {
 					var html = "";
 
-					console.log("array" + array.Count);
-
-					if (array.Count > 0) {
+					if (array.length > 0) {
 						html +='<table class="grid">'
 								+'<thead>' +'<tr>' +'<th>Id</th>' +'<th>Produto</th>' + '<th>Preço</th>' + '<th>&nbsp;</th>' + '</tr>' +'</thead>'
 								+'<tbody>';
 
-						for (var i = (array.Count - 1); i >= 0; i--) {
+						for (var i = (array.length - 1); i >= 0; i--) {
 							html +='<tr>'
-								  +'<td class="grid-col"><a class="edit" onclick="fncEdit(\'' + array.Items[i].id + '\', \'' + array.Items[i].nome + '\', \'' + array.Items[i].preco + '\')">' + array.Items[i].id + '</a></td>'
-								  +'<td class="grid-col">' + array.Items[i].nome + '</td>'
-								  +'<td class="grid-col">' + array.Items[i].preco + '</td>'
-								  +'<td class="grid-col"><a class="delete" onclick="fncDelete(' + array.Items[i].id + ')">X</a></td>'
+								  +'<td class="grid-col"><a class="edit" onclick="fncEdit(\'' + array[i].id.S + '\', \'' + array[i].nome.S + '\', \'' + array[i].preco.N + '\')">' + array[i].id.S + '</a></td>'
+								  +'<td class="grid-col">' + array[i].nome.S + '</td>'
+								  +'<td class="grid-col">' + array[i].preco.N + '</td>'
+								  +'<td class="grid-col"><a class="delete" onclick="fncDelete(' + array[i].id.S + ')">X</a></td>'
 								  +'</tr>';
 						}
 
